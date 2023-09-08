@@ -1,1 +1,42 @@
+app = Flask(__name__)
 
+@app.route('/api', methods=['GET'])
+def api():
+    # Get query parameters from the URL
+    slack_name = request.args.get('Ayeola_Aina Halimat')
+    track = request.args.get('backend')
+
+    # Check if the required parameters are provided
+    if slack_name is None or track is None:
+        return jsonify({'error': 'Both slack_name and track are required.'}), 400
+
+    # Get the current day of the week
+    current_day = datetime.now(pytz.utc).strftime('%A')
+
+    # Get the current UTC time
+    utc_time = datetime.now(pytz.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    # Construct GitHub URLs based on your repository and file
+    github_username = 'Halimat92'  # Replace with your GitHub username
+    github_repo = 'HNGTASK'  # Replace with your GitHub repository name
+    github_file = 'TASK 1'  # Replace with your file name
+
+    github_file_url = f'https://github.com/Halimat92/HNGTASK/blob/main/TASK%201/{github_username}/{github_repo}/blob/main/{github_file}'
+    github_repo_url = f'https://github.com/Halimat92/HNGTASK.git{github_username}/{github_repo}'
+
+    # Create the JSON response
+    response = {
+        'slack_name': slack_name,
+        'current_day': current_day,
+        'utc_time': utc_time,
+        'track': track,
+        'github_file_url':github_file_url ,
+        'github_repo_url': github_repo_url,
+        'status_code': 200
+    }
+
+    return jsonify(response)
+# print(api)
+
+if __name__ == '__main__':
+    app.run(debug=True)
